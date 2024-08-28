@@ -1,7 +1,6 @@
 import streamlit as st
 from audio_recorder_streamlit import audio_recorder
 import azure.cognitiveservices.speech as speechsdk
-import io
 
 # Azure Cognitive Services setup
 speech_key = "YOUR_AZURE_SPEECH_KEY"
@@ -10,8 +9,13 @@ service_region = "YOUR_SERVICE_REGION"
 def speech_to_text(audio_data):
     # Initialize Azure Speech SDK for speech recognition
     speech_config = speechsdk.SpeechConfig(subscription=speech_key, region=service_region)
-    audio_config = speechsdk.audio.AudioConfig(stream=io.BytesIO(audio_data))
-
+    
+    # Save the recorded audio to a file (required for the Azure SDK)
+    with open("recorded_audio.wav", "wb") as audio_file:
+        audio_file.write(audio_data)
+    
+    # Configure audio for speech recognition from the saved file
+    audio_config = speechsdk.audio.AudioConfig(filename="recorded_audio.wav")
     recognizer = speechsdk.SpeechRecognizer(speech_config=speech_config, audio_config=audio_config)
     result = recognizer.recognize_once()
 
@@ -33,17 +37,8 @@ def text_to_speech(text):
 
     synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=audio_config)
 
-    # Define SSML
-    ssml = f"""
-    <speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xmlns:emo="http://www.w3.org/2009/10/emotionml" version="1.0" xml:lang="ur-PK">
-        <voice name="ur-PK-UzmaNeural">
-            {text}
-        </voice>
-    </speak>
-    """
-
-    # Perform text-to-speech with SSML
-    result = synthesizer.speak_ssml_async(ssml).get()
+    # Perform text-to-speech
+    result = synthesizer.speak_text_async(text).get()
 
     if result.reason == speechsdk.ResultReason.SynthesizingAudioCompleted:
         st.success("Successfully synthesized the text.")
