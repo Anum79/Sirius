@@ -28,7 +28,7 @@ st.title("Speech Synthesis with Streamlit")
 st.write("Record your audio and convert text to speech!")
 
 # Record audio
-audio_data = audio_recorder("Click to record", recording_length=10)
+audio_data = audio_recorder("Click to record")
 if audio_data:
     st.audio(audio_data, format='audio/wav')
     st.write("Audio recorded successfully!")
