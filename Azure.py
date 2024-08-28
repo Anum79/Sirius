@@ -1,5 +1,5 @@
-speech_key = "YOUR_AZURE_SPEECH_KEY"
-service_region = "YOUR_SERVICE_REGION"
+# speech_key = "YOUR_AZURE_SPEECH_KEY"
+# service_region = "YOUR_SERVICE_REGION"
 
 
 import os
