@@ -1,21 +1,20 @@
-import streamlit as st
 import azure.cognitiveservices.speech as speechsdk
-import os
+import streamlit as st
+from audio_recorder_streamlit import audio_recorder
 
 def text_to_speech_urdu(text):
     # Replace with your Azure Speech service key and region
-    speech_key = "YOUR_SPEECH_KEY"
+    speech_key = "YOUR_AZURE_SPEECH_KEY"
     service_region = "YOUR_SERVICE_REGION"
 
     # Set up the Azure Speech SDK
     speech_config = speechsdk.SpeechConfig(subscription=speech_key, region=service_region)
     speech_config.speech_synthesis_voice_name = "ur-PK-UzmaNeural"  # Ensure this voice is supported
 
-    # Output audio to a WAV file
-    audio_file = "output_audio.wav"
-    audio_output = speechsdk.audio.AudioOutputConfig(filename=audio_file)
+    # Create an in-memory audio stream
+    audio_config = speechsdk.audio.AudioOutputConfig(use_default_speaker=False)
 
-    synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=audio_output)
+    synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=audio_config)
 
     # Define SSML
     ssml = f"""
@@ -30,22 +29,28 @@ def text_to_speech_urdu(text):
     result = synthesizer.speak_ssml_async(ssml).get()
 
     if result.reason == speechsdk.ResultReason.SynthesizingAudioCompleted:
-        st.success("Successfully synthesized the text.")
-        st.audio(audio_file, format='audio/wav')
+        st.write("Successfully synthesized the text.")
+        # Return the synthesized audio
+        return result.audio_data
     elif result.reason == speechsdk.ResultReason.Canceled:
         cancellation_details = result.cancellation_details
-        st.error(f"Speech synthesis canceled: {cancellation_details.reason}")
+        st.write(f"Speech synthesis canceled: {cancellation_details.reason}")
         if cancellation_details.reason == speechsdk.CancellationReason.Error:
-            st.error(f"Error details: {cancellation_details.error_details}")
+            st.write(f"Error details: {cancellation_details.error_details}")
+        return None
 
-    # Cleanup the file
-    if os.path.exists(audio_file):
-        os.remove(audio_file)
+def main():
+    st.title("Urdu Text-to-Speech")
 
-if __name__ == "__main__":
-    st.title("Urdu Text to Speech")
-
-    urdu_text = st.text_area("Enter the text you want to convert to speech in Urdu:", "یہ ایک ٹیسٹ ہے")
+    urdu_text = st.text_area("Enter the text you want to convert to speech in Urdu:")
 
     if st.button("Convert to Speech"):
-        text_to_speech_urdu(urdu_text)
+        if urdu_text:
+            audio_data = text_to_speech_urdu(urdu_text)
+            if audio_data:
+                st.audio(audio_data, format='audio/wav')
+        else:
+            st.warning("Please enter some text.")
+
+if __name__ == "__main__":
+    main()
