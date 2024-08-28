@@ -8,3 +8,4 @@ SpeechRecognition
 gtts
 pyttsx3
 textblob
+azure-cognitiveservices-speech
