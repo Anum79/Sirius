@@ -14,8 +14,10 @@ if api_key is None:
     raise ValueError("API key not found. Set the GEMINI_API_KEY environment variable.")
 genai.configure(api_key=api_key)
 
-speech_key = "547a69c82f0f428caad3537ce7f58c73"  
-service_region = "eastus"  
+speech_key = os.getenv("AZURE_SPEECH_KEY")
+service_region = os.getenv("AZURE_SERVICE_REGION")
+if speech_key is None or service_region is None:
+    raise ValueError("Azure Speech key or service region not found. Set the AZURE_SPEECH_KEY and AZURE_SERVICE_REGION environment variables.")
 
 translator = GoogleTranslator(source='en', target='ur')
 
