@@ -5,7 +5,24 @@ import azure.cognitiveservices.speech as speechsdk
 import streamlit as st
 from audio_recorder_streamlit import audio_recorder
 import tempfile
-import pyttsx3
+import speech_recognition as sr
+
+def transcribe_audio_to_text(audio_data):
+    # Initialize recognizer
+    recognizer = sr.Recognizer()
+
+    # Use the audio data to recognize text
+    with sr.AudioFile(audio_data) as source:
+        audio = recognizer.record(source)  # Read the entire audio file
+        try:
+            # Recognize speech using Google Web Speech API
+            text = recognizer.recognize_google(audio, language="ur-PK")
+            return text
+        except sr.UnknownValueError:
+            st.error("Google Web Speech API could not understand the audio")
+        except sr.RequestError as e:
+            st.error(f"Could not request results from Google Web Speech API; {e}")
+    return None
 
 def text_to_speech_urdu(text):
     # Replace with your Azure Speech service key and region
@@ -48,22 +65,22 @@ def play_audio(audio_file_path):
         st.audio(audio_file.read(), format="audio/wav")
 
 # Streamlit app
-st.title("Urdu Text-to-Speech Converter")
-
-# Text input for generating speech
-text_input = st.text_area("Enter the text you want to convert to speech in Urdu:")
-
-# Button to generate speech
-if st.button("Generate Speech"):
-    if text_input:
-        audio_file_path = text_to_speech_urdu(text_input)
-        if audio_file_path:
-            play_audio(audio_file_path)
-    else:
-        st.warning("Please enter some text to convert to speech.")
+st.title("Voice-to-Speech Converter")
 
 # Option to record audio input
-st.subheader("Or record your voice:")
+st.subheader("Record your voice:")
 audio_bytes = audio_recorder()
 if audio_bytes:
-    st.audio(audio_bytes, format="audio/wav")
+    # Save the recorded audio temporarily
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as temp_audio_file:
+        temp_audio_file.write(audio_bytes)
+    
+    # Transcribe the recorded audio to text
+    transcribed_text = transcribe_audio_to_text(temp_audio_file.name)
+    if transcribed_text:
+        st.write("Transcribed Text:", transcribed_text)
+
+        # Generate and play speech from the transcribed text
+        audio_file_path = text_to_speech_urdu(transcribed_text)
+        if audio_file_path:
+            play_audio(audio_file_path)
