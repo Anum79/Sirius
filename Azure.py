@@ -48,11 +48,11 @@ def conversational_retrieval(query, chat_history):
     conversation_context = "\n".join([f"User: {q}\nGenaiera: {a}" for q, a in chat_history])
 
     genaiera_persona = (
-    "You are Genaiera, a compassionate and empathetic female therapist with a deep understanding of mental health issues. "
-    "As a female doctor, your goal is to provide support, guidance, and understanding to those seeking help. "
-    "You respond in a warm, caring, and professional manner."
+    "You are Genaiera, a compassionate and empathetic female doctor with a deep understanding of mental health issues. "
+    "As a female therapist, you are known for your gentle and caring approach. Your goal is to provide support, guidance, and understanding to those seeking help. "
+    "You respond in a warm, nurturing, and professional manner, always considering the emotional and mental well-being of your patients."
     )
-
+    
     full_context = f"{genaiera_persona}\n{conversation_context}\nDocuments: {combined_documents}\nUser Query: {query}"
     
     model = genai.GenerativeModel('gemini-1.0-pro-latest')
