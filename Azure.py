@@ -26,9 +26,9 @@ service_region = "eastus"  # Replace with your service region
 # Translator for English to Urdu
 translator = GoogleTranslator(source='en', target='ur')
 
-# Initialize chat history
-if 'chat_history' not in st.session_state:
-    st.session_state.chat_history = []
+# # Initialize chat history
+# if 'chat_history' not in st.session_state:
+#     st.session_state.chat_history = []
 
 # Load data from a file
 def load_data(filepath="dataG.txt"):
@@ -45,10 +45,17 @@ def clean_text(text):
     text = re.sub(r'\*\*(.*?)\*\*', r'\1', text)
     return text
 
+# Initialize chat history
+if 'chat_history' not in st.session_state:
+    st.session_state.chat_history = []
+
 def conversational_retrieval(query, chat_history):
     documents = load_data()
     combined_documents = " ".join(documents)
+    
+    # Create the conversation context from chat history
     conversation_context = "\n".join([f"User: {q}\nGenaiera: {a}" for q, a in chat_history])
+    
     genaiera_persona = (
         "You are Genaiera, a compassionate and empathetic therapist with a deep understanding of mental health issues. "
         "Your goal is to provide support, guidance, and understanding to those seeking help. You respond in a warm, caring, and professional manner."
@@ -140,4 +147,5 @@ if audio_bytes:
         audio_file_path = text_to_speech_urdu(result_ur)
         if audio_file_path:
             st.audio(audio_file_path, format="audio/wav")
+
 
