@@ -10,7 +10,7 @@ import pyttsx3
 def text_to_speech_urdu(text):
     # Replace with your Azure Speech service key and region
     speech_key = "YOUR_AZURE_SPEECH_KEY"
-    service_region = "YOUR_SERVICE_REGION"
+    service_region = "eastus"
 
     # Set up the Azure Speech SDK
     speech_config = speechsdk.SpeechConfig(subscription=speech_key, region=service_region)
