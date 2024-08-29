@@ -9,6 +9,7 @@ from deep_translator import GoogleTranslator
 import google.generativeai as genai
 import re
 
+# Configure API keys and regions
 api_key = os.getenv("GEMINI_API_KEY")
 if api_key is None:
     raise ValueError("API key not found. Set the GEMINI_API_KEY environment variable.")
@@ -19,11 +20,12 @@ service_region = os.getenv("AZURE_SERVICE_REGION")
 if speech_key is None or service_region is None:
     raise ValueError("Azure Speech key or service region not found. Set the AZURE_SPEECH_KEY and AZURE_SERVICE_REGION environment variables.")
 
+# Initialize translator
 translator = GoogleTranslator(source='en', target='ur')
 
-# # Initialize chat history
-# if 'chat_history' not in st.session_state:
-#     st.session_state.chat_history = []
+# Initialize chat history
+if 'chat_history' not in st.session_state:
+    st.session_state.chat_history = []
 
 def load_data(filepath="dataHealth.txt"):
     documents = []
@@ -37,9 +39,6 @@ def load_data(filepath="dataHealth.txt"):
 def clean_text(text):
     text = re.sub(r'\*\*(.*?)\*\*', r'\1', text)
     return text
-
-if 'chat_history' not in st.session_state:
-    st.session_state.chat_history = []
 
 def conversational_retrieval(query, chat_history):
     documents = load_data()
@@ -131,5 +130,3 @@ if audio_bytes:
         audio_file_path = text_to_speech_urdu(result_ur)
         if audio_file_path:
             st.audio(audio_file_path, format="audio/wav")
-
-
