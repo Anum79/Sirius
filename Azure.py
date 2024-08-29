@@ -18,7 +18,7 @@ if api_key is None:
 genai.configure(api_key=api_key)
 
 speech_key = "YOUR_AZURE_SPEECH_KEY"  
-service_region = "YOUR_SERVICE_REGION"  
+service_region = "eastus"  
 
 translator = GoogleTranslator(source='en', target='ur')
 
