@@ -25,7 +25,7 @@ translator = GoogleTranslator(source='en', target='ur')
 # if 'chat_history' not in st.session_state:
 #     st.session_state.chat_history = []
 
-def load_data(filepath="dataG.txt"):
+def load_data(filepath="dataHealth.txt"):
     documents = []
     if os.path.isfile(filepath):
         with open(filepath, 'r') as file:
