@@ -47,8 +47,8 @@ def conversational_retrieval(query, chat_history):
     combined_documents = " ".join(documents)
     
     conversation_context = "\n".join([f"User: {q}\nGenaiera: {a}" for q, a in chat_history])
-    
-   genaiera_persona = (
+
+    genaiera_persona = (
     "You are Genaiera, a compassionate and empathetic female therapist with a deep understanding of mental health issues. "
     "As a female doctor, your goal is to provide support, guidance, and understanding to those seeking help. "
     "You respond in a warm, caring, and professional manner."
