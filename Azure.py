@@ -10,6 +10,7 @@ import speech_recognition as sr
 from datasets import load_dataset
 from deep_translator import GoogleTranslator
 import google.generativeai as genai
+import re
 
 
 # Configure the API key for Google Gemini AI
