@@ -9,7 +9,6 @@ from deep_translator import GoogleTranslator
 import google.generativeai as genai
 import re
 
-# Configure API keys and regions
 api_key = os.getenv("GEMINI_API_KEY")
 if api_key is None:
     raise ValueError("API key not found. Set the GEMINI_API_KEY environment variable.")
@@ -20,10 +19,8 @@ service_region = os.getenv("AZURE_SERVICE_REGION")
 if speech_key is None or service_region is None:
     raise ValueError("Azure Speech key or service region not found. Set the AZURE_SPEECH_KEY and AZURE_SERVICE_REGION environment variables.")
 
-# Initialize translator
 translator = GoogleTranslator(source='en', target='ur')
 
-# Initialize chat history
 if 'chat_history' not in st.session_state:
     st.session_state.chat_history = []
 
@@ -48,6 +45,7 @@ def conversational_retrieval(query, chat_history):
 
     genaiera_persona = (
     "You are Genaiera, a compassionate and empathetic female doctor with a deep understanding of mental health issues. "
+    "Your pronoun is she, you are female response like a girl, like a lady."
     "As a female therapist, you are known for your gentle and caring approach. Your goal is to provide support, guidance, and understanding to those seeking help. "
     "You respond in a warm, nurturing, and professional manner, always considering the emotional and mental well-being of your patients."
     )
