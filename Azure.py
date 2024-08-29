@@ -1,6 +1,3 @@
-# speech_key = "YOUR_AZURE_SPEECH_KEY"
-# service_region = "YOUR_SERVICE_REGION"
-
 import os
 import azure.cognitiveservices.speech as speechsdk
 import streamlit as st
@@ -17,7 +14,7 @@ if api_key is None:
     raise ValueError("API key not found. Set the GEMINI_API_KEY environment variable.")
 genai.configure(api_key=api_key)
 
-speech_key = "YOUR_AZURE_SPEECH_KEY"  
+speech_key = "547a69c82f0f428caad3537ce7f58c73"  
 service_region = "eastus"  
 
 translator = GoogleTranslator(source='en', target='ur')
