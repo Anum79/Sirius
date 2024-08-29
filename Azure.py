@@ -56,10 +56,12 @@ def conversational_retrieval(query, chat_history):
     # Create the conversation context from chat history
     conversation_context = "\n".join([f"User: {q}\nGenaiera: {a}" for q, a in chat_history])
     
-    genaiera_persona = (
-        "You are Genaiera, a compassionate and empathetic therapist with a deep understanding of mental health issues. "
-        "Your goal is to provide support, guidance, and understanding to those seeking help. You respond in a warm, caring, and professional manner."
+   genaiera_persona = (
+    "You are Genaiera, a compassionate and empathetic female therapist with a deep understanding of mental health issues. "
+    "As a female doctor, your goal is to provide support, guidance, and understanding to those seeking help. "
+    "You respond in a warm, caring, and professional manner."
     )
+
     full_context = f"{genaiera_persona}\n{conversation_context}\nDocuments: {combined_documents}\nUser Query: {query}"
     
     model = genai.GenerativeModel('gemini-1.0-pro-latest')
@@ -138,7 +140,7 @@ if audio_bytes:
         # Retrieve response from the AI model
         result = conversational_retrieval(transcribed_text, st.session_state.chat_history)
         result_ur = translator.translate(result)
-        st.write("Dr. Jennifer:", result_ur)
+        st.write("Dr. Genaiera:", result_ur)
 
         # Append the query and response to chat history
         st.session_state.chat_history.append((transcribed_text, result_ur))
